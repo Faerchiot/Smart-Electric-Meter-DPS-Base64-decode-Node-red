@@ -1,0 +1,96 @@
+[
+    {
+        "id": "cd1f5683a8780a2e",
+        "type": "tab",
+        "label": "TUYA Energymeter Parser",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9815b7e617ba7d57",
+        "type": "inject",
+        "z": "cd1f5683a8780a2e",
+        "name": "EnergyMeter Payload i Base64 Testvalue1 ",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "COYAAIgAAAA=",
+        "payloadType": "str",
+        "x": 260,
+        "y": 120,
+        "wires": [
+            [
+                "34977a7ebfb527ad"
+            ]
+        ]
+    },
+    {
+        "id": "34977a7ebfb527ad",
+        "type": "function",
+        "z": "cd1f5683a8780a2e",
+        "name": "EnergyMeter Decoder - Faerch IoT",
+        "func": "// Base64 Binary string decode  - Søren Færch :\nvar encodeddata = msg.payload;\nvar input = Buffer.from(encodeddata, 'base64');\nlet bin = Array.from(input, x => x.toString(2).padStart(8, '0')).join('');\nlet V = parseInt(bin.slice(0, 16), 2) / 10.0;\nlet A = parseInt(bin.slice(16, 40), 2);\nlet W = parseInt(bin.slice(40, 64), 2);\nmsg.payload = { \"energyMeter\": [\n    { \"Enhed\": \"Voltage\", \"Value\": V }, \n    { \"Enhed\": \"milliAmps\", \"Value\": A   }, \n    { \"Enhed\": \"Watt\", \"Value\": W }\n    ]};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 140,
+        "wires": [
+            [
+                "5e3227a08f875766"
+            ]
+        ]
+    },
+    {
+        "id": "5e3227a08f875766",
+        "type": "debug",
+        "z": "cd1f5683a8780a2e",
+        "name": "Output data JSON",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "7d1a297cbd65ed51",
+        "type": "inject",
+        "z": "cd1f5683a8780a2e",
+        "name": "EnergyMeter Payload i Base64 Testvalue 2",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "CHgADuYAAzg=",
+        "payloadType": "str",
+        "x": 260,
+        "y": 160,
+        "wires": [
+            [
+                "34977a7ebfb527ad"
+            ]
+        ]
+    }
+]
